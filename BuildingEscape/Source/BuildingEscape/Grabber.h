@@ -49,7 +49,8 @@ private:
 	//Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
 
-	enum ReachLineParameter{START, END};
-
+	enum ReachLineParameter{START, END}; //Used by GetReachline method
+	
+	// with ReachLineParameter START Returns start of the reach line, with END returns the end of the reach line
 	const FVector GetReachLine(UGrabber::ReachLineParameter ReachLineParameter);
 };

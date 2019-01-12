@@ -42,7 +42,9 @@ private:
 	float DoorLastOpenTime;
 
 	//UPROPERTY(EditAnywhere)
-		AActor* ActorThatOpens;//Remember Pawn inherits from actor
 		AActor* Owner;
+
+	//Returns total mass in kg
+		float GetTotalMassOfActorsOnPlate();
 		
 };

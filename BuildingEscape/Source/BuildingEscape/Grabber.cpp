@@ -8,7 +8,7 @@
 #include "Engine/Classes/Engine/EngineTypes.h"
 #include "Engine/Classes/Components/InputComponent.h"
 
-#define OUT
+#define OUT //the output parameter from UE's metods or functions
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -16,10 +16,7 @@ UGrabber::UGrabber()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
-
 
 // Called when the game starts
 void UGrabber::BeginPlay()
@@ -49,22 +46,18 @@ void UGrabber::SetupInputComponent()
 	}
 }
 
-
 void UGrabber::Grab() {
-	UE_LOG(LogTemp, Error, TEXT("%s is grabbing!"), *GetOwner()->GetName())
-
 	/// LINE TRACE and see if we reach any actors with physics body collision channel set
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
 	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
 	AActor* ActorHit = HitResult.GetActor();
 	///If we hit something then attach a physics handle
 	if (ActorHit) {
-		//Attach Physics Handle
 		PhysicsHandle->GrabComponent(
 			ComponentToGrab,
-			NAME_None,
+			NAME_None, //no bones needed
 			ComponentToGrab->GetOwner()->GetActorLocation(),
-			true
+			true // allow rotation
 		);
 	}
 }
@@ -86,19 +79,17 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 {
-	///Setup query parameteres 
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-
 	///Ray-cast (AKA Line-Trace) out to reach distance
-	FHitResult LineTraceHit;
+	FHitResult HitResult;
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 	GetWorld()->LineTraceSingleByObjectType(
-		OUT LineTraceHit,
+		OUT HitResult,
 		UGrabber::GetReachLine(START),
 		UGrabber::GetReachLine(END),
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParameters
 	);
-	return LineTraceHit;
+	return HitResult;
 }
 
 const FVector UGrabber::GetReachLine(UGrabber::ReachLineParameter ReachLineParameter)

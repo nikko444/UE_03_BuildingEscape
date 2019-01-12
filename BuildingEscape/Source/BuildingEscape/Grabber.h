@@ -48,4 +48,8 @@ private:
 
 	//Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
+
+	enum ReachLineParameter{START, END};
+
+	const FVector GetReachLine(UGrabber::ReachLineParameter ReachLineParameter);
 };

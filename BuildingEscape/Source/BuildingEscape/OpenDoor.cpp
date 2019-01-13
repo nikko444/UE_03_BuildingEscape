@@ -29,16 +29,6 @@ void UOpenDoor::BeginPlay()
 	}
 }
 
-void UOpenDoor::OpenDoor()
-{
-	if (Owner) {
-		Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("No owner is set for UOpenDoor"))
-	}
-}
-
 void UOpenDoor::CloseDoor()
 {
 	if (Owner) {
@@ -56,14 +46,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	// Poll the Trigger Volume
 	// If the ActorThatOpens is in the volume
-	if (GetTotalMassOfActorsOnPlate() > 30.f) {  //TODO Make into a parameter
-	
-		OpenDoor();
-		DoorLastOpenTime = GetWorld()->GetTimeSeconds();
-	}
-	//Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() >= (DoorLastOpenTime + DoorCloseDelay)) {
-		CloseDoor();
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass) {
+		OnOpenRequest.Broadcast();
+	} else {
+		OnCloseRequest.Broadcast();
 	}
 }
 
